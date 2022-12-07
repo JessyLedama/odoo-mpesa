@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        <template id="mpesa_acquirer_button">
+            <form id="form-mpesa" method="POST" t-att-action="tx_url" target="_self">
+
+                 <!-- Extra Fields for Amount & Phone Number -->
+                <div t-att-class="'form-group col-md-4' if bootstrap_formatting else 'form-group'">
+                    <label class="control-label" for="mpesa_number">M-Pesa Number</label>
+                    <input type="text" name="mpesa_number" id="mpesa_number" class="form-control" maxlength="12" placeholder="254 729 123 467"/>
+                    <input t-att-value="acquirer.max_amount" type="hidden" name="max_amount" id="max_amount"/>
+                </div>
+                <!-- Check the maximum limit if exceeded -->
+                <t t-if="website">
+                    <t t-set="order" t-value="website.sale_get_order()"/>
+                    <t t-set="above_limit" t-value="order.amount_total > acquirer.max_amount"/>
+
+                    <div class="alert alert-danger" t-if="above_limit">
+                        <span>M-pesa Maximum limit of KSh. <span t-esc="acquirer.max_amount"/> exceeded! </span>
+                    </div>
+                </t>
+                <p id="mpesa-errors"/>
+                <button t-att-class="submit_class" width="100px" id="mpesa" data-loading-text='&lt;i class="fa fa-circle-o-notch fa-spin"&gt;&lt;/i&gt; Processing Order' t-if="not above_limit">
+                    <img src="/payment_mpesa/static/src/img/mpesa_icon.png" t-if="not submit_txt"/>
+                    <span t-if="submit_txt">
+                        <t t-esc="submit_txt"/>
+                        <span class="fa fa-long-arrow-right"/>
+                    </span>
+                </button>
+
+                <button t-att-class="submit_class" width="100px" id="mpesa" disabled="true" t-if="above_limit">
+                    <img src="/payment_mpesa/static/src/img/mpesa_icon.png" t-if="not submit_txt"/>
+                    <span t-if="submit_txt">
+                        <t t-esc="submit_txt"/>
+                        <span class="fa fa-long-arrow-right"/>
+                    </span>
+                </button>
+            </form>
+        </template>
+    </data>
+</openerp>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+    <t t-extend="Paymentline">
+        <t t-jquery=".paymentline-input" t-operation="append">
+            <t t-if="line.mpesa_cashregister &amp;&amp; line.payment_status !== 'done'">
+                <div class='paymentline-name'>
+                    <p>Enter Phone Number</p>
+                </div>
+                <input class='paymentline-input phone'/>
+            </t>
+        </t>
+        <t t-jquery=".paymentline-delete" t-operation="replace">
+                <span  class='paymentline-delete-custom paymentline-delete'>
+                    <img src="/point_of_sale/static/src/img/search_reset.gif" />
+                </span>
+            <t t-if="line.mpesa_cashregister &amp;&amp; line.payment_status !== 'done'">
+                <button class="confirm-payment">Confirm</button>
+            </t>
+        </t>
+    </t>
+</templates>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="payment_acquirer_mpesa" model="payment.acquirer">
+            <field name="name">Mpesa</field>
+            <field name="provider">mpesa</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="view_template_id" ref="payment_mpesa.mpesa_acquirer_button"/>
+            <field name="image" type="base64" file="payment_mpesa/static/src/img/mpesa_icon.png"/>
+            <field name="environment">test</field>
+            <field name="pre_msg"><![CDATA[
+<p>You will be Prompted to Confirm the transaction via your phone from MPESA after clicking on the pay now.</p>]]></field>
+            <field name="pending_msg"><![CDATA[
+<p>Pending, Your order has been successfully processed but we could not confirm your payment. You will receive a message once we receive the confirmation</p>]]></field>
+        </record>
+    </data>
+</openerp>

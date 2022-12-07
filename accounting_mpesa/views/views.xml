@@ -1,0 +1,107 @@
+<openerp>
+    <data>
+
+        <!-- mpesa.payment.transaction tree view -->
+        <record id="mpesa_payment_transaction_view_tree" model="ir.ui.view">
+            <field name="name">mpesa.payment.transaction.view.tree</field>
+            <field name="model">mpesa.payment.transaction</field>
+            <field name="arch" type="xml">
+                <tree string="Mpesa Transactions">
+                    <field name="payment_date"/>
+                    <field name="name"/>
+                    <field name="customer_name"/>
+                    <field name="phone_number"/>
+                    <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="reference"/>
+                    <field name="origin"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- mpesa.payment.transaction form view -->
+        <record id="mpesa_payment_transaction_view_form" model="ir.ui.view">
+            <field name="name">mpesa.payment.transaction.view.form</field>
+            <field name="model">mpesa.payment.transaction</field>
+            <field name="arch" type="xml">
+                <form string="Mpesa Transaction">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="pending,done,cancel,reverse" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <!-- TODO: Add smart button to partner_id -->
+                        <!-- TODO: Add smart button to relevant accounting record -->
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" class="oe_inline" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="payment_date"/>
+                                <field name="customer_name"/>
+                                <field name="phone_number"/>
+                            </group>
+                            <group>
+                                <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="reference"/>
+                                <field name="origin"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- mpesa.payment.transaction search view -->
+        <record id="mpesa_payment_transaction_view_search" model="ir.ui.view">
+            <field name="name">mpesa.payment.transaction.view.search</field>
+            <field name="model">mpesa.payment.transaction</field>
+            <field name="arch" type="xml">
+                <search string="Search Description">
+                    <field name="name"/>
+                    <field name="customer_name"/>
+                    <field name="phone_number"/>
+                    <field name="amount"/>
+                    <field name="reference"/>
+                    <field name="phone_number"/>
+                    <field name="state"/>
+                    <separator/>
+                    <filter name="pending" string="Pending" domain="[('state', '=', 'pending')]"/>
+                    <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                    <filter name="reverse" string="Reversed" domain="[('state', '=', 'reverse')]"/>
+                    <filter name="cancel" string="Cancelled" domain="[('state', '=', 'cancel')]"/>
+                    <separator/>
+                    <filter name="pos" string="POS Transactions" domain="[('origin', '=', 'pos')]"/>
+                    <filter name="ecommerce" string="E-Commerce" domain="[('origin', '=', 'ecommerce')]"/>
+                    <filter name="sale" string="Sales Transactions" domain="[('origin', '=', 'sale')]"/>
+                    <!-- TODO: Add Today, Yesterday, This Month, Last Month, This Year etc filters -->
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="phone" string="Phone Number" domain="[]" context="{'group_by':'phone_number'}"/>
+                        <filter name="customer_name" string="Customer" domain="[]" context="{'group_by':'customer_name'}"/>
+                        <filter name="payment_date" string="Date" domain="[]" context="{'group_by':'payment_date'}"/>
+                        <filter name="origin" string="Origin" domain="[]" context="{'group_by':'origin'}"/>
+                        <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- mpesa.payment.transaction action window -->
+        <record id="mpesa_payment_transaction_action" model="ir.actions.act_window">
+            <field name="name">Mpesa Payment Transaction</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mpesa.payment.transaction</field>
+            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="search_view_id" ref="mpesa_payment_transaction_view_search"/>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="mpesa_payment_transaction_menu_act" name="Mpesa Transactions" parent="account_followup.menu_finance_followup" action="accounting_mpesa.mpesa_payment_transaction_action" sequence="5"/>
+
+    </data>
+</openerp>
